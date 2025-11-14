@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { FaWindowClose } from "react-icons/fa";
-
+import { addword } from '../store/vocabulary/VocabularySlice';
+import type { RootState } from '../store/vocabulary/VocabularyStore';
+import { useDispatch, useSelector } from 'react-redux';
 const Tables = () => {
   const [formData, setFormData] = useState<string>('')
-  const [vocabulary, setVocabulary] = useState<string[]>([])
-
+  const dispatch = useDispatch()
+  const vocabulary = useSelector((state: RootState) => state.vocabulary.list)
   const handleSubmit = (e: React.FormEvent) => {
-    console.log(formData);
     e.preventDefault()
-    setVocabulary((prev => [...prev, formData]))
+    dispatch(addword(formData))
+
     setFormData('')
+    console.log(vocabulary);
+
   }
 
   return (
