@@ -1,20 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaWindowClose } from "react-icons/fa";
-import { addword } from '../store/vocabulary/VocabularySlice';
-import type { RootState } from '../store/vocabulary/VocabularyStore';
-import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 const Tables = () => {
   const [formData, setFormData] = useState<string>('')
-  const dispatch = useDispatch()
-  const vocabulary = useSelector((state: RootState) => state.vocabulary.list)
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    dispatch(addword(formData))
+  const [vocabulary , setVocabulary] = useState<string[]>([])
+  const [loading , isLoading] = useState<boolean>(false)
 
-    setFormData('')
-    console.log(vocabulary);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    console.log(formData);
+    
+    const res = await axios.post('http://localhost:3001/api/vocabulary',{word:formData})
+
+    
 
   }
+  const gellAllData = async () =>{
+    try {
+      const res = await axios.get("http://localhost:3001/api/vocabulary")
+      console.log(res.data);
+      
+    }catch(err){
+      console.log(err);
+      
+    }
+  }
+  useEffect(()=>{
+    gellAllData()
+  },[])
 
   return (
     <div>
@@ -25,9 +38,6 @@ const Tables = () => {
             <tr>
               <th className="border border-gray-300 px-4 py-2">English Word</th>
               <th className="border border-gray-300 px-4 py-2">EN-Meaning</th>
-              <th className="border border-gray-300 px-4 py-2">ML-Meaning</th>
-              <th className="border border-gray-300 px-4 py-2">Image</th>
-              <th className="border border-gray-300 ">Pronunciation</th>
             </tr>
           </thead>
           <tbody>

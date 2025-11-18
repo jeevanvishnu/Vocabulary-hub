@@ -22,37 +22,78 @@ export const getAllData = async (req: Request, res: Response) => {
 export const postAllData = async (req: Request, res: Response) => {
   try {
     const { word } = req.body;
+    if (!word) return res.status(400).json({ message: 'Word is missing' });
     console.log(word);
 
-    const openRouter = new OpenRouter({
-      apiKey:
-        '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',
-    });
+    const apiKey = process.env.OPEN_ROUTER_API
 
-    const completion = await openRouter.chat.send({
-      model: 'openai/gpt-oss-20b',
-      messages: [
-        {
-          role: 'user',
-          content: `When I give you a word, correct its spelling, explain the meaning in English, explain the same meaning in Malayalam, and give 2 example sentences — each English sentence must have the exact same meaning in Malayalam. ${word} `,
+    let response = await fetch(
+      'https://openrouter.ai/api/v1/chat/completions',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
         },
-      ],
-      stream: false,
-    });
+        body: JSON.stringify({
+          model: 'openai/gpt-oss-20b:free',
+          messages: [
+            {
+              role: 'user',
+              content: `You are a vocabulary teaching assistant.
 
-    let responseText = completion?.choices[0]?.message?.content;
-    if (!responseText)
-      return res.status(500).json({ message: 'Ai is not responded' });
+                When I give you a word, do the following:
+
+                1. Correct the spelling if needed.
+                2. Give the English meaning (short and clear).
+                3. Give the Malayalam meaning.
+                4. Give exactly 2 example sentences:
+                  - Each English sentence must have the exact same meaning translated into Malayalam.
+
+                Format the output like this:
+
+                English Meaning:
+                <meaning>
+
+                Malayalam Meaning:
+                <meaning>
+
+                Examples:
+                1. English: <sentence>
+                  Malayalam: <sentence>
+
+                2. English: <sentence>
+                  Malayalam: <sentence>
+
+                The word is: ${word}
+                `,
+            },
+          ],
+          
+        }),
+      }
+    );
+
+    const result = await response.json();
+    const aiResponse = result?.choices[0]?.message?.content;
+    
+    
+
+    if (!aiResponse)
+      return res.status(404).json({ messaage: 'Ai Response is found' });
+
     const vocabulary = new vocabularModel({
       englishWord: word,
-      englishMeaning: completion?.choices[0]?.message?.content,
+      englishMeaning: aiResponse,
     });
+
     await vocabulary.save();
-    res
-      .status(200)
-      .json({ message: 'sucessfully saved', aiResponse: responseText });
+    res.status(201).json({message:"Sucessfully saved",Response:aiResponse})
+
   } catch (err) {
     res.status(500).json({ message: 'Internal server error' });
     console.log('The error is comming in postAllData', err);
   }
 };
+
+

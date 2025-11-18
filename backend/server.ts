@@ -12,6 +12,11 @@ const PORT = process.env.PORT || 3000
 console.log(chalk.red(PORT,"port check"));
 
 
+app.use(cors({
+    origin:" http://localhost:5173"
+}))
+
+
 // middleware setup 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
@@ -19,9 +24,6 @@ app.use(express.urlencoded({extended:true}))
 
 app.use('/api/vocabulary',vocabularyRoute)
 
-app.use(cors({
-    origin:" http://localhost:5173"
-}))
 
 const startServer = async ()  =>{
     await connectDb()
