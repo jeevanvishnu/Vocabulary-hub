@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import express from "express"
 import dotEvn from "dotenv"
+import cors from "cors"
 import connectDb from "./src/config/database.ts";
 import vocabularyRoute from "./src/router/vocabular.router.ts"
 
@@ -15,7 +16,12 @@ console.log(chalk.red(PORT,"port check"));
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
+
 app.use('/api/vocabulary',vocabularyRoute)
+
+app.use(cors({
+    origin:" http://localhost:5173"
+}))
 
 const startServer = async ()  =>{
     await connectDb()
