@@ -2,7 +2,6 @@ import vocabularModel from '../models/vocabulary.schema.ts';
 import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
-import { OpenRouter } from '@openrouter/sdk';
 type Request = express.Request;
 type Response = express.Response;
 
