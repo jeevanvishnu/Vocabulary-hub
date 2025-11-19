@@ -23,6 +23,15 @@ const Tables = ({ showForm, setShowForm }: showFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+     <ConfirmToast
+        buttonNoText='No'
+        buttonYesText='Yes'
+        customFunction={myFunction}
+        setShowConfirmToast={setShow}
+        showConfirmToast={show}
+        theme='dark'
+        toastText=''
+      />
     try {
       setIsLoading(true)
      const res = await axios.post('http://localhost:3001/api/vocabulary', {
@@ -119,12 +128,14 @@ const Tables = ({ showForm, setShowForm }: showFormProps) => {
           onClick={() => setShowForm(false)}
           className="absolute top-3 right-3 cursor-pointer transition duration-150 hover:scale-110"
         />
-        <h2 className="mb-8  ">ഇന്നത്തെ പുതിയ വാക്ക്</h2>
+        <h2 className="mb-8  ">ഇന്നത്തെ പുതിയ വാക്ക് </h2>
+        <span className='text-red-500 font-light font-serif text-[15px]'>“Please make sure the spelling is correct.”</span>
         <input
           value={formData}
           onChange={(e) => setFormData(e.target.value)}
           type="text"
           className="px-2 border-2 border-blue-600 rounded-md outline-none w-60 h-7 md:h-11 md:w-80 font-semibold mb-4"
+          required
         />
         <button
           type="submit"
