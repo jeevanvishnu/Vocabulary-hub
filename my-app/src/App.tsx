@@ -1,17 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useState } from 'react'
+
 import Button from './components/Button'
 import Tables from './components/Tables'
-import Bytez from "bytez.js"
 
 const App = () => {
-  <div>
-    
-  </div>
+  const [showForm , setShowForm] = useState<boolean>(false)
 
   return (
     <div>
-      <Button />
-      <Tables />
+      <Button setShowForm={setShowForm} />
+      <Tables showForm={showForm} setShowForm={setShowForm}/>
     </div>
   )
 }

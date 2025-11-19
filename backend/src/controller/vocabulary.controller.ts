@@ -8,7 +8,7 @@ type Response = express.Response;
 // This is get all data from the database
 export const getAllData = async (req: Request, res: Response) => {
   try {
-    const vocabulary = await vocabularModel.find();
+    const vocabulary = await vocabularModel.find().sort({_id:-1})
     res.status(200).json({ vocabulary });
   } catch (err) {
     res.status(500).json({ message: 'Internal server error' });
@@ -80,6 +80,12 @@ export const postAllData = async (req: Request, res: Response) => {
 
     if (!aiResponse)
       return res.status(404).json({ messaage: 'Ai Response is found' });
+
+    const exestingVocabulary = await vocabularModel.findOne({englishWord:word})
+
+    if(exestingVocabulary){
+      return res.status(500).json({message:"Already exist in the vocabulary"})
+    }
 
     const vocabulary = new vocabularModel({
       englishWord: word,

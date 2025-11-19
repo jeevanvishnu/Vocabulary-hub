@@ -10,7 +10,8 @@ interface vocabulary extends Document  {
 const vocabularySchema:Schema = new Schema({
     englishWord:{
         type:String,
-        required:true
+        required:true,
+        unique:true
     },
     
     englishMeaning:{
