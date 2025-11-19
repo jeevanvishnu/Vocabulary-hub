@@ -13,7 +13,7 @@ console.log(chalk.red(PORT,"port check"));
 
 
 app.use(cors({
-    origin:"https://vocabulary-hub.netlify.app/"
+    origin:"https://vocabulary-hub.netlify.app"
 }))
 
 
