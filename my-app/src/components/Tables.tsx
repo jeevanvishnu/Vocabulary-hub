@@ -17,16 +17,18 @@ type showFormProps = {
 };
 
 const Tables = ({ showForm, setShowForm }: showFormProps) => {
+
   const [formData, setFormData] = useState<string>('');
   const [vocabulary, setVocabulary] = useState<vocabulary[]>([]);
   const [isLoading , setIsLoading] = useState<boolean>(false)
-
+  
+  const URL = "https://vocabulary-hub.onrender.com/api/vocabulary"
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
      
     try {
       setIsLoading(true)
-     const res = await axios.post('http://localhost:3001/api/vocabulary', {
+     const res = await axios.post(URL, {
       word: formData,
     });
     console.log(res.data?.vocabulary?.message);
@@ -50,7 +52,7 @@ const Tables = ({ showForm, setShowForm }: showFormProps) => {
 
   const getAllData = async () => {
     try {
-      const res = await axios.get('http://localhost:3001/api/vocabulary');
+      const res = await axios.get(URL);
       setVocabulary(res?.data?.vocabulary);
     } catch (err) {
       console.log(err);
