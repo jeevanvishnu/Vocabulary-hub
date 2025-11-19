@@ -23,15 +23,7 @@ const Tables = ({ showForm, setShowForm }: showFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-     <ConfirmToast
-        buttonNoText='No'
-        buttonYesText='Yes'
-        customFunction={myFunction}
-        setShowConfirmToast={setShow}
-        showConfirmToast={show}
-        theme='dark'
-        toastText=''
-      />
+     
     try {
       setIsLoading(true)
      const res = await axios.post('http://localhost:3001/api/vocabulary', {
