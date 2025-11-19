@@ -3,9 +3,7 @@ import dotenv from "dotenv"
 import chalk from "chalk";
 dotenv.config()
 const connectDb  = async () =>{
-    const URL = process.env.MONOGODB_URL as string
-        console.log(URL,"Mongi..");
-        
+    const URL = process.env.MONGODB_URL as string
     try{
        await mongoose.connect(URL as string)
         console.log(chalk.green(`Database connected sucessfully`));
