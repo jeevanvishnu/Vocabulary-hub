@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaWindowClose } from 'react-icons/fa';
 import axios from 'axios';
-import toast from 'react-hot-toast';
+import {toast} from 'react-toastify';
 import { formDate } from '../lib/utile';
 import { formatMeaning } from '../lib/formating';
 
@@ -29,17 +29,20 @@ const Tables = ({ showForm, setShowForm }: showFormProps) => {
       word: formData,
     });
     console.log(res.data?.vocabulary?.message);
-    
-    toast.success(res.data.vocabulary.message)
+    toast.success(res.data.message)
     getAllData();
     
 
     } catch (error) {
-      console.log(error);
+        if(axios.isAxiosError(error)){
+          const backendMessage = error.response?.data || "Already have this word"
+          toast.error(backendMessage.message);
+        }
       
     } finally{
       setIsLoading(false)
       setShowForm(false)
+      setFormData('')
     }
     
   };
@@ -54,7 +57,6 @@ const Tables = ({ showForm, setShowForm }: showFormProps) => {
   };
 
   useEffect(() => {
-    toast.success("Hello")
     getAllData();
   }, []);
 

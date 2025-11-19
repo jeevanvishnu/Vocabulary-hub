@@ -24,6 +24,14 @@ export const postAllData = async (req: Request, res: Response) => {
     if (!word) return res.status(400).json({ message: 'Word is missing' });
     console.log(word);
 
+
+
+    const exestingVocabulary = await vocabularModel.findOne({englishWord:word})
+
+    if(exestingVocabulary){
+      return res.status(500).json({message:"Already exist in the vocabulary"})
+    }
+
     const apiKey = process.env.OPEN_ROUTER_API
 
     let response = await fetch(
@@ -81,11 +89,6 @@ export const postAllData = async (req: Request, res: Response) => {
     if (!aiResponse)
       return res.status(404).json({ messaage: 'Ai Response is found' });
 
-    const exestingVocabulary = await vocabularModel.findOne({englishWord:word})
-
-    if(exestingVocabulary){
-      return res.status(500).json({message:"Already exist in the vocabulary"})
-    }
 
     const vocabulary = new vocabularModel({
       englishWord: word,
