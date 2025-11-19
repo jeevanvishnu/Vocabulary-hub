@@ -8,8 +8,8 @@
     "ts-node": "^10.9.2"
   },
   "scripts": {
-    "start": "nodemon server.ts",
-    "dev": "node server.ts"
+    "start": "node server.ts",
+    "dev": "nodemon server.ts"
   },
   "peerDependencies": {
     "typescript": "^5.9.3"
