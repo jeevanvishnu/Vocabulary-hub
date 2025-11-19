@@ -13,9 +13,10 @@ console.log(chalk.red(PORT,"port check"));
 
 
 app.use(cors({
-    origin:"https://vocabulary-hub.netlify.app"
+    origin:"https://vocabulary-hub.netlify.app",
+    methods: ["GET", "POST", "PUT", "DELETE"],
 }))
-
+app.options('',cors())
 
 // middleware setup 
 app.use(express.json())
