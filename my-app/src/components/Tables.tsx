@@ -22,7 +22,7 @@ const Tables = ({ showForm, setShowForm }: showFormProps) => {
   const [vocabulary, setVocabulary] = useState<vocabulary[]>([]);
   const [isLoading , setIsLoading] = useState<boolean>(false)
   
-  const URL = "vocabulary-hub-production.up.railway.app/api/vocabulary"
+  const URL = "https://vocabulary-hub-production.up.railway.app/api/vocabulary"
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
      
