@@ -2,55 +2,57 @@ name: vocabulary-hub
 
 on:
   push:
-    branches: ["main"]  
+    branches: ["main"]
 
 jobs:
-   build:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-     - name: checkout code
-       uses: action/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    
-     - name: setup Node.js
-       uses: action/setup-node@v3
-       with:
-        node-version: 18
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-     - name: setup Bun
-       uses:  oven-sh/setup-bun@v1
-       
-     - name: Install backend dependencies
-       run: |
-        if[ -f "bun.lockb"];then
-        echo "Installing backend with bun"
-        bun install
-        else
-        echo "Installing backend with npm"
-        npm install 
-        fi
-       working-directory: ./backend
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
 
+      # ---------------------------
+      # Backend
+      # ---------------------------
+      - name: Install backend dependencies
+        run: |
+          if [ -f "bun.lockb" ]; then
+            echo "Installing backend with bun"
+            bun install
+          else
+            echo "Installing backend with npm"
+            npm install
+          fi
+        working-directory: ./backend
 
-    #    FRONTEND SETUP 
+      # ---------------------------
+      # Frontend
+      # ---------------------------
+      - name: Install frontend dependencies
+        run: |
+          if [ -f "bun.lockb" ]; then
+            echo "Installing frontend with bun"
+            bun install
+          else
+            echo "Installing frontend with npm"
+            npm install
+          fi
+        working-directory: ./frontend   # change this if your folder is my-app
 
-     - name: Install frontend dependencies
-       run: |
-        if [ -f "bun.lockb"];then
-         echo "Installing frontend with bun"
-         bun install
-         else
-         echo "installing frontend with npm"
-         npm install
-         fi
-       working-directory: ./my-app
-
-     - name: Build frontend
-       run: |
-        if [- f "bun.lockb"]; then
-        bun run build
-        else
-        npm run build
-        fi
-       working-directory: ./my-app
+      - name: Build frontend
+        run: |
+          if [ -f "bun.lockb" ]; then
+            bun run build
+          else
+            npm run build
+          fi
+        working-directory: ./frontend   # change if needed
