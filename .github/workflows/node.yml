@@ -18,13 +18,7 @@ jobs:
           bun-version: latest
 
       - name: Install dependencies
-        run: |
-          if [ -f "bun.lockb" ]; then
-            echo "Installing with bun"
-            bun install
-          else
-            npm install
-          fi
+        run: bun install
 
       - name: Build project
         run: bun run build
