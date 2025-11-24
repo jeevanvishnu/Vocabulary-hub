@@ -49,15 +49,15 @@ export const postAllData = async (req: Request, res: Response) => {
               role: 'user',
               content: `You are a vocabulary teaching assistant.
 
-                When I give you a word, do the following:
+                When I give you a word, do these steps:
 
-                1. Correct the spelling if needed.
-                2. Give the English meaning (short and clear).
+                1. Fix the spelling if the word is wrong.
+                2. Give a short and simple English meaning.
                 3. Give the Malayalam meaning.
                 4. Give exactly 2 example sentences:
-                  - Each English sentence must have the exact same meaning translated into Malayalam.
+                  - Each English sentence must have the same meaning written in Malayalam.
 
-                Format the output like this:
+                Use this format:
 
                 English Meaning:
                 <meaning>
@@ -73,6 +73,7 @@ export const postAllData = async (req: Request, res: Response) => {
                   Malayalam: <sentence>
 
                 The word is: ${word}
+
                 `,
             },
           ],

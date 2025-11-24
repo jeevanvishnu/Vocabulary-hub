@@ -22,7 +22,7 @@ const Tables = ({ showForm, setShowForm }: showFormProps) => {
   const [vocabulary, setVocabulary] = useState<vocabulary[]>([]);
   const [isLoading , setIsLoading] = useState<boolean>(false)
   
-  const URL = "https://vocabulary-hub-production.up.railway.app/api/vocabulary"
+  const URL = "vocabulary-hub-production.up.railway.app/api/vocabulary"
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
      
@@ -122,7 +122,7 @@ const Tables = ({ showForm, setShowForm }: showFormProps) => {
           onClick={() => setShowForm(false)}
           className="absolute top-3 right-3 cursor-pointer transition duration-150 hover:scale-110"
         />
-        <h2 className="mb-8  ">ഇന്നത്തെ പുതിയ വാക്ക് </h2>
+        <h2 className="mb-8  ">What is today word</h2>
         <span className='text-red-500 font-light font-serif text-[15px]'>“Please make sure the spelling is correct.”</span>
         <input
           value={formData}
