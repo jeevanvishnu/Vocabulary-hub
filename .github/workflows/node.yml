@@ -2,26 +2,55 @@ name: vocabulary-hub
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main"]  
 
 jobs:
-  build:
+   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+     - name: checkout code
+       uses: action/checkout@v3
 
-      - name: Install Bun
-        uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
+    
+     - name: setup Node.js
+       uses: action/setup-node@v3
+       with:
+        node-version: 18
 
-      - name: Install dependencies
-        run: bun install
+     - name: setup Bun
+       uses:  oven-sh/setup-bun@v1
+       
+     - name: Install backend dependencies
+       run: |
+        if[ -f "bun.lockb"];then
+        echo "Installing backend with bun"
+        bun install
+        else
+        echo "Installing backend with npm"
+        npm install 
+        fi
+       working-directory: ./backend
 
-      - name: Build project
-        run: bun run build
 
-      - name: Success message
-        run: echo "Build completed!"
+    #    FRONTEND SETUP 
+
+     - name: Install frontend dependencies
+       run: |
+        if [ -f "bun.lockb"];then
+         echo "Installing frontend with bun"
+         bun install
+         else
+         echo "installing frontend with npm"
+         npm install
+         fi
+       working-directory: ./my-app
+
+     - name: Build frontend
+       run: |
+        if [- f "bun.lockb"]; then
+        bun run build
+        else
+        npm run build
+        fi
+       working-directory: ./my-app
