@@ -24,6 +24,7 @@ jobs:
       # Backend
       # ---------------------------
       - name: Install backend dependencies
+        working-directory: backend
         run: |
           if [ -f "bun.lockb" ]; then
             echo "Installing backend with bun"
@@ -32,12 +33,21 @@ jobs:
             echo "Installing backend with npm"
             npm install
           fi
-        working-directory: ./backend
+
+      - name: Run backend tests
+        working-directory: backend
+        run: |
+          if [ -f "bun.lockb" ]; then
+            bun test
+          else
+            npm test
+          fi
 
       # ---------------------------
       # Frontend
       # ---------------------------
       - name: Install frontend dependencies
+        working-directory: my-app
         run: |
           if [ -f "bun.lockb" ]; then
             echo "Installing frontend with bun"
@@ -46,13 +56,12 @@ jobs:
             echo "Installing frontend with npm"
             npm install
           fi
-        working-directory: ./frontend   # change this if your folder is my-app
 
       - name: Build frontend
+        working-directory: my-app
         run: |
           if [ -f "bun.lockb" ]; then
             bun run build
           else
             npm run build
           fi
-        working-directory: ./frontend   # change if needed
