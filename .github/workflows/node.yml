@@ -43,9 +43,8 @@ jobs:
             npm test
           fi
 
-      # ---------------------------
-      # Frontend
-      # ---------------------------
+    #   Frontend 
+    
       - name: Install frontend dependencies
         working-directory: my-app
         run: |
