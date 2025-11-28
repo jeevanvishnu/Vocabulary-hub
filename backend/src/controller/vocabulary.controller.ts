@@ -34,57 +34,35 @@ export const postAllData = async (req: Request, res: Response) => {
 
     const apiKey = process.env.OPEN_ROUTER_API
 
-    let response = await fetch(
-      'https://openrouter.ai/api/v1/chat/completions',
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+  method: "POST",
+  headers: {
+    "Authorization": `Bearer ${apiKey}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    model: "openai/gpt-oss-20b:free",
+    messages: [
       {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'openai/gpt-oss-20b:free',
-          messages: [
-            {
-              role: 'user',
-              content: `You are a vocabulary teaching assistant.
+        role: "user",
+        content: `You are a vocabulary teaching assistant.
+        When I give you a word, do these steps:
 
-                When I give you a word, do these steps:
-
-                1. Fix the spelling if the word is wrong.
-                2. Give a short and simple English meaning.
-                3. Give the Malayalam meaning.
-                4. Give exactly 2 example sentences:
-                  - Each English sentence must have the same meaning written in Malayalam.
-
-                Use this format:
-
-                English Meaning:
-                <meaning>
-
-                Malayalam Meaning:
-                <meaning>
-
-                Examples:
-                1. English: <sentence>
-                  Malayalam: <sentence>
-
-                2. English: <sentence>
-                  Malayalam: <sentence>
-
-                The word is: ${word}
-
-                `,
-            },
-          ],
-          
-        }),
+        1. Fix the spelling if the word is wrong.
+        2. Give a short and simple English meaning.
+        3. Give the Malayalam meaning.
+        4. Give exactly 2 example sentences (English + Malayalam).
+        `
       }
-    );
+    ]
+  })
+});
 
-    const result = await response.json();
-    const aiResponse = result?.choices[0]?.message?.content;
-    
+const result = await response.json();
+const aiResponse = result?.choices?.[0]?.message?.content;
+
+console.log(aiResponse);
+
     
 
     if (!aiResponse)
