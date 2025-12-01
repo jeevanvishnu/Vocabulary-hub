@@ -16,7 +16,8 @@ app.use(cors({
     origin:"https://vocabulary-hub.netlify.app",
     methods: ["GET", "POST", "PUT", "DELETE"],
 }))
-app.options('',cors())
+app.options('*', cors());
+
 
 // middleware setup 
 app.use(express.json())
