@@ -1,0 +1,16 @@
+FROM oven/bun:1-debian
+
+
+WORKDIR /app
+
+COPY package*.json ./
+
+
+RUN bun install
+
+COPY . .
+
+EXPOSE 3001
+
+CMD [ "bun" , "start" ]
+
