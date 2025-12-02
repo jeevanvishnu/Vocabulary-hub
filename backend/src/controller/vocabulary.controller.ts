@@ -83,6 +83,10 @@ export const postAllData = async (req: Request, res: Response) => {
     );
 
     const result = await response.json();
+    console.log(result)
+    if(result){
+      return res.status(404).json({ messaage: 'Ai Response result error' });
+    }
     const aiResponse = result?.choices[0]?.message?.content;
     
     
