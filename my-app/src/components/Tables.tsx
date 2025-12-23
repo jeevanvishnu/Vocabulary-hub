@@ -22,7 +22,7 @@ const Tables = ({ showForm, setShowForm }: showFormProps) => {
   const [vocabulary, setVocabulary] = useState<vocabulary[]>([]);
   const [isLoading , setIsLoading] = useState<boolean>(false)
   
-  const URL = "https://vocabulary-hub-production.up.railway.app/api/vocabulary"
+  const URL = "https://vocabulary-hub.onrender.com/api/vocabulary"
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
      
@@ -52,7 +52,6 @@ const Tables = ({ showForm, setShowForm }: showFormProps) => {
 
   const getAllData = async () => {
     try {
-      const res = await axios.get(URL);
       setVocabulary(res?.data?.vocabulary);
     } catch (err) {
       console.log(err);
