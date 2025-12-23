@@ -52,6 +52,7 @@ const Tables = ({ showForm, setShowForm }: showFormProps) => {
 
   const getAllData = async () => {
     try {
+      const res = await axios.get(URL);
       setVocabulary(res?.data?.vocabulary);
     } catch (err) {
       console.log(err);
