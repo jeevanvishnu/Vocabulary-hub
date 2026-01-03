@@ -33,6 +33,10 @@ export const postAllData = async (req: Request, res: Response) => {
     }
 
     const apiKey = process.env.OPEN_ROUTER_API
+    if (!apiKey) {
+      return res.status(500).json({ message: 'API key missing' });
+      }
+
 
     let response = await fetch(
       'https://openrouter.ai/api/v1/chat/completions',
