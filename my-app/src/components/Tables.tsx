@@ -1,67 +1,55 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FaWindowClose } from 'react-icons/fa';
 import axios from 'axios';
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
 import { formDate } from '../lib/utile';
 import { formatMeaning } from '../lib/formating';
 
-type vocabulary = {
+export type VocabularyItem = {
   englishWord: string;
   englishMeaning: string;
   createdAt: string;
 };
 
-type showFormProps = {
+type TablesProps = {
   showForm: boolean;
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
+  vocabulary: VocabularyItem[];
+  refreshData: () => Promise<void>;
 };
 
-const Tables = ({ showForm, setShowForm }: showFormProps) => {
+const Tables = ({ showForm, setShowForm, vocabulary, refreshData }: TablesProps) => {
 
   const [formData, setFormData] = useState<string>('');
-  const [vocabulary, setVocabulary] = useState<vocabulary[]>([]);
-  const [isLoading , setIsLoading] = useState<boolean>(false)
-  
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
   const URL = "https://vocabulary-hub.onrender.com/api/vocabulary"
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-     
+
     try {
       setIsLoading(true)
-     const res = await axios.post(URL, {
-      word: formData,
-    });
-    console.log(res.data?.vocabulary?.message);
-    toast.success(res.data.message)
-    getAllData();
-    
+      const res = await axios.post(URL, {
+        word: formData,
+      });
+      console.log(res.data?.vocabulary?.message);
+      toast.success(res.data.message)
+      await refreshData();
 
     } catch (error) {
-        if(axios.isAxiosError(error)){
-          const backendMessage = error.response?.data || "Already have this word"
-          toast.error(backendMessage.message);
-        }
-      
-    } finally{
+      if (axios.isAxiosError(error)) {
+        const responseData = error.response?.data;
+        const errorMessage = responseData?.message || (typeof responseData === 'string' ? responseData : "Already have this word");
+        toast.error(errorMessage);
+      }
+
+    } finally {
       setIsLoading(false)
       setShowForm(false)
       setFormData('')
     }
-    
   };
-
-  const getAllData = async () => {
-    try {
-      const res = await axios.get(URL);
-      setVocabulary(res?.data?.vocabulary);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    getAllData();
-  }, []);
 
   return (
     <div>
@@ -96,49 +84,48 @@ const Tables = ({ showForm, setShowForm }: showFormProps) => {
       <form
         action=""
         onSubmit={handleSubmit}
-        className={` w-[300px] h-[200px]  ${
-          showForm
+        className={` w-[300px] h-[200px]  ${showForm
             ? 'opacity-100 scale-100 pointer-events-auto'
             : 'opacity-0 scale-95 pointer-events-none'
-        }  transition-all duration-500 delay-75 ease-in-out border-0 rounded-md shadow-2xl  absolute left-1/6 top-8 md:left-2/6 flex flex-col bg-amber-50 md:w-[500px] items-center justify-center md:h-[400px]`}
+          }  transition-all duration-500 delay-75 ease-in-out border-0 rounded-md shadow-2xl  absolute left-1/6 top-8 md:left-2/6 flex flex-col bg-amber-50 md:w-[500px] items-center justify-center md:h-[400px]`}
       >
         {
-           isLoading ? 
-            (           
-                      
-          <div className="flex-col gap-4 w-full flex items-center justify-center">
-            <div
-              className="w-20 h-20 border-4 border-transparent text-blue-400 text-4xl animate-spin flex items-center justify-center border-t-blue-400 rounded-full"
-            >
-              <div
-                className="w-16 h-16 border-4 border-transparent text-red-400 text-2xl animate-spin flex items-center justify-center border-t-red-400 rounded-full"
-              ></div>
-            </div>
-          </div>
+          isLoading ?
+            (
 
-            ):( <>
+              <div className="flex-col gap-4 w-full flex items-center justify-center">
+                <div
+                  className="w-20 h-20 border-4 border-transparent text-blue-400 text-4xl animate-spin flex items-center justify-center border-t-blue-400 rounded-full"
+                >
+                  <div
+                    className="w-16 h-16 border-4 border-transparent text-red-400 text-2xl animate-spin flex items-center justify-center border-t-red-400 rounded-full"
+                  ></div>
+                </div>
+              </div>
 
-        <FaWindowClose
-          onClick={() => setShowForm(false)}
-          className="absolute top-3 right-3 cursor-pointer transition duration-150 hover:scale-110"
-        />
-        <h2 className="mb-8  ">What is today word</h2>
-        <span className='text-red-500 font-light font-serif text-[15px]'>“Please make sure the spelling is correct.”</span>
-        <input
-          value={formData}
-          onChange={(e) => setFormData(e.target.value)}
-          type="text"
-          className="px-2 border-2 border-blue-600 rounded-md outline-none w-60 h-7 md:h-11 md:w-80 font-semibold mb-4"
-          required
-        />
-        <button
-          type="submit"
-          className="transition cursor-pointer duration-200 ease-in-out w-20 h-auto px-4 py-2 text-white bg-blue-800 border hover:scale-110 rounded-md"
-        >
-          Add
-        </button>
-        </>
-      )}
+            ) : (<>
+
+              <FaWindowClose
+                onClick={() => setShowForm(false)}
+                className="absolute top-3 right-3 cursor-pointer transition duration-150 hover:scale-110"
+              />
+              <h2 className="mb-8  ">What is today word</h2>
+              <span className='text-red-500 font-light font-serif text-[15px]'>“Please make sure the spelling is correct.”</span>
+              <input
+                value={formData}
+                onChange={(e) => setFormData(e.target.value)}
+                type="text"
+                className="px-2 border-2 border-blue-600 rounded-md outline-none w-60 h-7 md:h-11 md:w-80 font-semibold mb-4"
+                required
+              />
+              <button
+                type="submit"
+                className="transition cursor-pointer duration-200 ease-in-out w-20 h-auto px-4 py-2 text-white bg-blue-800 border hover:scale-110 rounded-md"
+              >
+                Add
+              </button>
+            </>
+            )}
 
       </form>
     </div>
