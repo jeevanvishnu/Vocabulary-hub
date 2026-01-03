@@ -47,7 +47,7 @@ export const postAllData = async (req: Request, res: Response) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'openai/gpt-oss-120b:free',
+          model: 'openai/gpt-4o-mini',
           messages: [
             {
               role: 'user',
